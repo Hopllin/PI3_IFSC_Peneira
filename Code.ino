@@ -10,6 +10,7 @@
 #define next true
 #define tela true
 #define hx true
+#define rle true
 
 modbusDevice regBank;
 modbusSlave slave;
@@ -201,26 +202,27 @@ void loop() {
   lb1 = b1;
   lb2 = b2;
   
-
-  //Loop do fim de curso 
-  if(digitalRead(FC2) == HIGH && digitalRead(SobeInc) == LOW){ 
-    while(digitalRead(FC2) == HIGH){
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-    }
-    digitalWrite(IN2, LOW);
-  } 
-  if(digitalRead(FC1) == HIGH && digitalRead(DesceInc) == LOW){
-    
-    while(digitalRead(FC1) == HIGH){
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN1, HIGH);
-    }
-    digitalWrite(IN1, LOW);
-  }
-
+  #if rle == true
+      //Loop do fim de curso 
+      if(digitalRead(FC2) == HIGH && digitalRead(SobeInc) == LOW){ 
+        while(digitalRead(FC2) == HIGH){
+          digitalWrite(IN1, LOW);
+          digitalWrite(IN2, HIGH);
+        }
+        digitalWrite(IN2, LOW);
+      } 
+      if(digitalRead(FC1) == HIGH && digitalRead(DesceInc) == LOW){
+        
+        while(digitalRead(FC1) == HIGH){
+          digitalWrite(IN2, LOW);
+          digitalWrite(IN1, HIGH);
+        }
+        digitalWrite(IN1, LOW);
+      }
+  #endif
+        
   #if modb == true
-
+  
     byte fc1 = digitalRead(10);
     byte fc2 = digitalRead(11);
     fc1 = 1;
@@ -243,6 +245,6 @@ void loop() {
     
     //roda o slave
     slave.run();  
-
+  
   #endif
 }
